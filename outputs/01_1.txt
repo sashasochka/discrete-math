@@ -1,0 +1,70 @@
+Enter input filename or press enter to read from stdin: Enter output filename or press enter to write to stdout: 
+
+Incidentness matrix (rows - vertex, columns - edges): 
+v\e|  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
+---------------------------------------------------------------------
+  1|  1 -1  1 -1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  2|  0  0  0  0 -1  0  0  0  0  0  0  0  0  1 -1  1 -1  0  0  0  0
+  3|  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  1  1 -1  0  0
+  4|  0  0  0  0  0  1 -1  1 -1  1 -1  0  0  0  0  0  0  0  0  0  0
+  5| -1  1  0  0  0 -1  1  0  0  0  0  0  0 -1  1  0  0  0  0  0  0
+  6|  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  1  1 -1
+  7|  0  0  0  0  0  0  0 -1  1  0  0  0  0  0  0  0  0  0  0  0  0
+  8|  0  0  0  0  0  0  0  0  0 -1  1  1 -1  0  0  0  0  0  0  0  0
+  9|  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 -1  1
+ 10|  0  0 -1  1  0  0  0  0  0  0  0 -1  1  0  0  0  0  0  0  0  0
+
+
+Adjacency matrix: 
+from\to|  1  2  3  4  5  6  7  8  9 10
+----------------------------------------
+      1|  0  0  0  0  1  0  0  0  0  1
+      2|  0  1  1  0  1  0  0  0  0  0
+      3|  0  1  0  0  0  1  0  0  0  0
+      4|  0  0  0  0  1  0  1  1  0  0
+      5|  1  1  0  1  0  0  0  0  0  0
+      6|  0  0  1  0  0  0  0  0  1  0
+      7|  0  0  0  1  0  0  0  0  0  0
+      8|  0  0  0  1  0  0  0  0  0  1
+      9|  0  0  0  0  0  1  0  0  0  0
+     10|  1  0  0  0  0  0  0  1  0  0
+
+
+Out degree per vertex table: 
+  №| Out degree
+----------------
+  1|  2
+  2|  3
+  3|  2
+  4|  3
+  5|  3
+  6|  2
+  7|  1
+  8|  2
+  9|  1
+ 10|  2
+
+
+In degree per vertex table: 
+  №| In degree
+---------------
+  1|  2
+  2|  3
+  3|  2
+  4|  3
+  5|  3
+  6|  2
+  7|  1
+  8|  2
+  9|  1
+ 10|  2
+ Graph is not uniform
+Do you want to get all terminal and isolated vertexes? YES/no?
+
+
+Terminal vertexes list: 
+[]
+
+
+Isolated vertexes list: 
+[]

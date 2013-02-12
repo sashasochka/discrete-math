@@ -1,3 +1,2 @@
-*.txt
-!inputs/*.txt
+/*.txt
 __*__
