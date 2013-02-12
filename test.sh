@@ -10,7 +10,7 @@ fi
 if [ ! -e $filename ]; then
   echo "File $filename doesn't exist!"
 fi
-if [ ! -x $lab.py ]; then
-  echo "File $lab.py doesn't exist or is not executable"
+if [ ! -x src/$lab.py ]; then
+  echo "File src/$lab.py doesn't exist or is not executable"
 fi 
-echo -e "$filename\n\n" | ./$lab.py
+echo -e "$filename\n\n" | src/$lab.py
