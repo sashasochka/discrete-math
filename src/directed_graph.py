@@ -24,8 +24,11 @@ def incidentMatrixByEdgeList(G):
   matrix = [[0] * m for i in range(n)]
   for (i, e) in enumerate(E):
     (v1, v2) = e
-    matrix[v1 - 1][i] = +1
-    matrix[v2 - 1][i] = -1
+    if v1 == v2:
+      matrix[v1-1][i] = 2
+    else:
+      matrix[v1 - 1][i] = +1
+      matrix[v2 - 1][i] = -1
   return matrix
 
 
