@@ -27,8 +27,8 @@ def incidentMatrixByEdgeList(G):
     if v1 == v2:
       matrix[v1-1][i] = 2
     else:
-      matrix[v1 - 1][i] = +1
-      matrix[v2 - 1][i] = -1
+      matrix[v1 - 1][i] = -1
+      matrix[v2 - 1][i] = +1
   return matrix
 
 
