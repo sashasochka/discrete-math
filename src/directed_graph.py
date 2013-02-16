@@ -3,7 +3,7 @@ import undirected_graph
 from sys import stdin
 from copy import deepcopy
 from queue import Queue, LifoQueue
-
+  
 
 inf = 1000000007
 
@@ -95,10 +95,8 @@ def reachable1ToAll(G, i):
   n, m, V = G
   r = [0] * n
   q = Queue()
-  for v in V[i]:
-    q.put(v)
-    r[v] = 1
-
+  q.put(i)
+  r[i] = 1
   while not q.empty():
     v = q.get()
     for adj in V[v]:
