@@ -1,0 +1,12 @@
+Enter input filename or press enter to read from stdin: Enter output filename or press enter to write to stdout: 
+
+Graph has cycles!
+
+
+  №| Strongly connected components
+-----------------------------------
+  1|[8, 17, 9, 10]
+  2|[7, 18]
+  3|[1, 5, 13, 14, 16, 11, 4, 6, 19]
+  4|[15, 2]
+  5|[3, 20, 12]
