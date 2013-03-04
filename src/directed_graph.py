@@ -188,3 +188,73 @@ def dfs_table(G, s):
         stack.append(neighbour)
     result.append((i+1, v+1, str(stack)))
   return result
+
+def topological_sort(G):
+  ''' adjacency list representation '''
+  def visit(i):
+    state[i] = temporary
+    for v in V[i]:
+      if state[v] == unmarked:
+        if not visit(v):
+          return False
+      elif state[v] == temporary:
+        return False
+    state[i] = finished
+    result.append(i)
+    return True 
+
+  # 0-index, adj_list repr
+  n, m, V = G
+  unmarked, temporary, finished = 0, 1, 2
+  state = [unmarked] * n
+  result = []
+  for i in range(n):
+    if state[i] == unmarked:
+      if not visit(i):
+        return None
+  return list(reversed([v+1 for v in result]))
+
+
+def reverse(G):
+  ''' adjacency list representation '''
+  n, m, V = G
+  V_rev = [[] for i in range(n)]
+  for i, l in enumerate(V):
+    for v in l:
+      V_rev[v].append(i)
+  return (n, m, V_rev)
+
+def strong_components(G):
+  def visit(s):
+    visited[s] = True
+    for v in V[s]:
+      if not visited[v]:
+        visit(v)
+    S.append(s)
+
+  n, m, V = G
+  visited = [False] * n
+  S = []
+  for i in range(n):
+    if not visited[i]:
+      visit(i)
+
+
+
+  def visitReverse(s):
+    components[-1].append(s + 1)
+    visited[s] = True
+    for v in V_rev[s]:
+      if not visited[v]:
+        visitReverse(v)
+
+  V_rev = reverse(G)[2]
+  visited = [False] * n
+  components = []
+  for i in range(n):
+    cur = S.pop()
+    if not visited[cur]:
+      components.append([])
+      visitReverse(cur)
+
+  return components
