@@ -58,5 +58,6 @@ def print_vector(vector, fout, title = '', width = 3):
     fout.write('\n')
 
 def ask(title):
-  answer = input('\n' + title + '\n')
-  return answer.strip().lower() in ['yes', 'y', ''] 
+  # answer = input('\n' + title + '\n')
+  # return answer.strip().lower() in ['yes', 'y', ''] 
+  return True
