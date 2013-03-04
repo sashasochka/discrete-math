@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import undirected_graph
 from sys import stdin
-from copy import deepcopy
+from copy import deepcopy, copy
 from queue import Queue, LifoQueue
+from collections import deque
   
 
 inf = 1000000007
@@ -31,7 +32,6 @@ def incidentMatrixByEdgeList(G):
       matrix[v2 - 1][i] = +1
   return matrix
 
-
 def adjacencyMatrixByEdgeList(G):
   # 1 - index
   n, m, E = G
@@ -48,7 +48,6 @@ def inOutDegreesByEdgeList(G):
     outD[v1-1] += 1
     inD[v2-1]  += 1
   return inD, outD
-
 
 def edgeListToAdjacencyList(G):
   # Note: also converted from 1-index to 0-index 
@@ -80,7 +79,6 @@ def dist1ToAll(G, i):
         d[adj] = d[v] + 1
         q.put(adj)
   return d
-
 
 def wavingReachable(G):
   # 0 -index, adj_list repr
@@ -156,3 +154,37 @@ def floydWarshall(M):
         if M[i][k] and M[k][j]:
           D[i][j] = min(D[i][j], D[i][k] + D[k][j])
   return D
+
+def bfs_table(G, s):
+  # adjacency list representation
+  n, m, V = G
+  result = []
+  visited = [False] * n
+  visited[s] = True
+  q = deque()
+  q.append(s)
+  for i in range(n):
+    v = q.popleft()
+    for neighbour in V[v]:
+      if not visited[neighbour]:
+        visited[neighbour] = True
+        q.append(neighbour)
+    result.append((i+1, v+1, list(q)))
+  return result
+
+def dfs_table(G, s):
+  # adjacency list representation
+  n, m, V = G
+  result = []
+  visited = [False] * n
+  visited[s] = True
+  stack = []
+  stack.append(s)
+  for i in range(n):
+    v = stack.pop()
+    for neighbour in V[v]:
+      if not visited[neighbour]:
+        visited[neighbour] = True
+        stack.append(neighbour)
+    result.append((i+1, v+1, str(stack)))
+  return result

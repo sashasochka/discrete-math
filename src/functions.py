@@ -41,6 +41,27 @@ def print_matrix(matrix, fout, title = '', width = 3):
       fout.write(frmt.format(matrix[i][j]))
     fout.write('\n')
 
+
+def print_table(matrix, fout, titles = [], width = 3):
+  n, m = len(matrix), len(matrix[0]) if len(matrix) else 0
+  frmt = ' |{:>' + str(width) + '}'
+
+  # first line
+  for title in titles:
+    fout.write(frmt.format(title))
+  fout.write('\n')
+
+  # second line
+  fout.write('-' * (sum(map(len, titles)) + 10) + '\n')
+
+  # subsequent lines
+  for i in range(n):
+    for j in range(m):
+      elementFormat = ' |{:' + str(len(titles[j])) + '}'
+      elementFormat.format(3)
+      fout.write(elementFormat.format(matrix[i][j]))
+    fout.write('\n')
+
 def print_vector(vector, fout, title = '', width = 3):
   frmt = '{:>' + str(width) + '}'
   n = len(vector)
