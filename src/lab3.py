@@ -18,12 +18,12 @@ def main():
   assert(1 <= s <= n)
 
   # part1:
-  print('\nBFS table:\n')
+  fout.write('\nBFS table:\n\n')
   print_table(graph.bfs_table(adj_G, s - 1), fout,
     ['BFS-number', 'Vertex number', 'Current queue'], 10)
 
   # part2:
-  print('\nDFS table:\n')
+  fout.write('\nDFS table:\n\n')
   print_table(graph.dfs_table(adj_G, s - 1), fout,
     ['DFS-number', 'Vertex number', 'Current stack'], 10)
 

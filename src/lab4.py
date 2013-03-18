@@ -14,15 +14,15 @@ def main():
   adj_G = graph.edgeListToAdjacencyList(G)
   
   # part1
-  print('\n')
+  fout.write('\n\n')
   top_sort = graph.topological_sort(adj_G)
   if top_sort != None:
     print_vector(top_sort, fout, 'Vertex')
   else:
-    print('Graph has cycles!')
+    fout.write('Graph has cycles!\n')
 
   # part2
-  print('\n')
+  fout.write('\n\n')
   print_vector(graph.strong_components(adj_G), fout, 'Strongly connected components')
 
 if __name__ == '__main__':

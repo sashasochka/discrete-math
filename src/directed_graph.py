@@ -169,7 +169,7 @@ def bfs_table(G, s):
       if not visited[neighbour]:
         visited[neighbour] = True
         q.append(neighbour)
-    result.append((i+1, v+1, list(q)))
+    result.append((i+1, v+1, list([a+1 for a in q])))
   return result
 
 def dfs_table(G, s):
@@ -186,7 +186,7 @@ def dfs_table(G, s):
       if not visited[neighbour]:
         visited[neighbour] = True
         stack.append(neighbour)
-    result.append((i+1, v+1, str(stack)))
+    result.append((i+1, v+1, str([a+1 for a in stack])))
   return result
 
 def topological_sort(G):
