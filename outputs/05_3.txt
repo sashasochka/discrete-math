@@ -1,0 +1,24 @@
+
+========================================
+1) Dijkstra's algorithm:
+
+Cannot find distance using dijkstra - negative edges are present
+
+========================================
+2) Bellman-Ford's algorithm:
+
+Distances from source vertex (#6) using Bellman-Ford's algorithm: 
+№.  | Distance
+  1 | 5
+  2 | -5
+  3 | -16
+  4 | -10
+  5 | -15
+  6 | 0
+  7 | -2
+  8 | -3
+  9 | -1
+ 10 | -3
+
+Path from #6 to #3:
+6 -> 9 -> 10 -> 2 -> 4 -> 5 -> 3

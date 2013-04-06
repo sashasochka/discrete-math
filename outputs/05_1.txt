@@ -1,0 +1,38 @@
+
+========================================
+1) Dijkstra's algorithm:
+
+Distances from source vertex (#1) using Dijkstra's algorithm: 
+№.  | Distance
+  1 | 0
+  2 | 7
+  3 | 6
+  4 | 16
+  5 | 5
+  6 | 13
+  7 | 3
+  8 | 17
+  9 | 20
+ 10 | 4
+
+Path from #1 to #9:
+1 -> 5 -> 6 -> 4 -> 8 -> 9
+
+========================================
+2) Bellman-Ford's algorithm:
+
+Distances from source vertex (#1) using Bellman-Ford's algorithm: 
+№.  | Distance
+  1 | 0
+  2 | 7
+  3 | 6
+  4 | 16
+  5 | 5
+  6 | 13
+  7 | 3
+  8 | 17
+  9 | 20
+ 10 | 4
+
+Path from #1 to #9:
+1 -> 5 -> 6 -> 4 -> 8 -> 9

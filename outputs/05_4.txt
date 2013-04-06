@@ -1,0 +1,10 @@
+
+========================================
+1) Dijkstra's algorithm:
+
+Cannot find distance using dijkstra - negative edges are present
+
+========================================
+2) Bellman-Ford's algorithm:
+
+Negative cycle present. There is no shortest paths
