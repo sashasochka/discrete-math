@@ -71,8 +71,7 @@ def dijkstra(G: Graph, s: int) -> list:
         G - graph we search distances in
         s - number (index) of source vertex in G
     Return:
-        tuple of distances from s to all reachable vertixes or
-                 and parent nodes for them
+        PathSearchResults object
         None if G has negative edges
     """
     if G.has_negative():
@@ -94,10 +93,11 @@ def dijkstra(G: Graph, s: int) -> list:
                 parent[e.dest] = v
                 heapq.heappush(heap, (dist[e.dest], e.dest))
 
+    for i, p in enumerate(parent):
+        if p is None and i != s:
+            dist[i] = None
+
     nodesList = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
     return PathSearchResults(s, nodesList)
-
-# TODO: implement bellman-ford
-
 
 
