@@ -3,6 +3,7 @@ Common for all labs functions
 """
 import sys
 
+
 class IO:
     """
     IO class which does file initialization from
@@ -11,7 +12,6 @@ class IO:
     """
     def __init__(self):
         """
-        () -> void
         Initialize input and ouput file objects from command line options or
         if absent from stdin/stdout
         """
@@ -23,9 +23,8 @@ class IO:
             print('Cannot open file {}!'.format(e.filename), file=sys.stderr)
             sys.exit(1)
 
-    def print(self, *args, **kwargs):
+    def print(self, *args: list, **kwargs: dict):
         """
-        (*args, **kwargs) -> void
         Works as builtin print except that prints to fileout
         """
         kwargs['file'] = self.fileout

@@ -2,6 +2,7 @@
 Includes weighted directed graph classes
 """
 import itertools
+import sys
 
 
 class Graph:
@@ -9,9 +10,8 @@ class Graph:
     Represents Directed Weighted Graph
     """
 
-    def __init__(self, V, E, edges):
+    def __init__(self, V: int, E: int, edges: list):
         """
-        (int, int, list of Edge) -> void
         Args:
             V is the number of vertexes
             E is the number of edges
@@ -27,9 +27,8 @@ class Graph:
                 self.__negative = True
 
     @classmethod
-    def fromfile(cls, readobj, one_indexation=True):
+    def fromfile(cls, readobj: type(sys.stdin), one_indexation: bool=True):
         """
-        (file) -> Graph
         Initialize object from readable file
         Args:
             readobj - readable object with input data in correcponding format
@@ -46,58 +45,53 @@ class Graph:
             edges.append(Edge(source, dest, width))
         return cls(V, E, edges)
 
-    def V(self):
+    def V(self) -> int:
         """
-        () -> int
         Return:
             number of vertexes
         """
         return self.__V
 
-    def E(self):
+    def E(self) -> int:
         """
-        () -> int
         Return:
             number of edges
         """
         return self.__E
 
-    def edges(self):
+    def edges(self) -> list:
         """
-        () -> list of Edge
         Return:
-            full list of edges in graph
+            list of edges in graph
         """
         return list(itertools.chain(*self.__adj))
 
-    def adj(self, source):
+    def adj(self, source: int) -> list:
         """
-        (int) -> list of Edge
         Args:
             source - vertex number
         Return:
-            list of all edges from source
+            list of all edges incident to source
         """
         assert 0 <= source < self.V()
         return self.__edges[source]
 
-    def has_negative(self):
+    def has_negative(self) -> bool:
         """
-        () -> boolean
         Return:
             True if graph has negative edges
             else False
         """
         return self.__negative
 
-    def reverse(self):
+    def reverse(self) -> Graph:
         return Graph(
             self.V(),
             self.E(),
             [e.reverse() for e in self.edges()]
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         result = '{}\n{}\n{}'.format(
             self.V(),
             self.E(),
@@ -109,9 +103,8 @@ class Edge:
     """
     Represent directed weighted edge
     """
-    def __init__(self, source, dest, weight):
+    def __init__(self, source: int, dest: int, weight: int):
         """
-        (int, int, int) -> void
         Args:
             source - is a source vertex
             dest - is a destination vertex
@@ -121,40 +114,39 @@ class Edge:
         self.dest = dest
         self.weight = weight
 
-    def reverse(self):
+    def reverse(self) -> Edge:
         """
-        () -> Edge
         Return:
             edge with reversed direction
         """
         return Edge(self.dest, self.source, self.weight)
 
-    def negative(self):
+    def negative(self) -> bool:
         """
-        () -> boolean
         Return:
             True if weight is negative
             else False
         """
         return self.weight < 0
 
-    def to_zero_based(self):
+    def to_zero_based(self) -> Edge:
         """
-        () -> Edge
         Change to 0-based index. Call only if 1-based now!
+        Return:
+            edge with decreased vertexes numbers by one
         """
         return Edge(self.source - 1, self.dest - 1, self.weight)
 
-    def to_one_based(self):
+    def to_one_based(self) -> Edge:
         """
-        () -> Edge
         Change to 1-based index. Call only if 0-based now!
+        Return:
+            edge with increased vertexes numbers by one
         """
         return Edge(self.source + 1, self.dest + 1, self.weight)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
-        () -> void
         Return:
             string representation
         """
