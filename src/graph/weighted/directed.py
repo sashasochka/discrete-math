@@ -84,7 +84,7 @@ class Graph:
         """
         return self.__negative
 
-    def reverse(self) -> Graph:
+    def reverse(self) -> 'Graph':
         return Graph(
             self.V(),
             self.E(),
@@ -114,7 +114,7 @@ class Edge:
         self.dest = dest
         self.weight = weight
 
-    def reverse(self) -> Edge:
+    def reverse(self) -> 'Edge':
         """
         Return:
             edge with reversed direction
@@ -129,7 +129,7 @@ class Edge:
         """
         return self.weight < 0
 
-    def to_zero_based(self) -> Edge:
+    def to_zero_based(self) -> 'Edge':
         """
         Change to 0-based index. Call only if 1-based now!
         Return:
@@ -137,7 +137,7 @@ class Edge:
         """
         return Edge(self.source - 1, self.dest - 1, self.weight)
 
-    def to_one_based(self) -> Edge:
+    def to_one_based(self) -> 'Edge':
         """
         Change to 1-based index. Call only if 0-based now!
         Return:
