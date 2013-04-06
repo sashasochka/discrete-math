@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from common import IO
 from graph import algorithm
 from graph.weighted.directed import Graph
