@@ -16,9 +16,15 @@ class IO:
         if absent from stdin/stdout
         """
         try:
-            self.filein = open(sys.argv[1], 'r') if len(sys.argv) > 1 else \
-                sys.stdin
-            self.fileout = open(sys.argv[2], 'w') if len(sys.argv) > 2 else sys.stdout
+            if len(sys.argv) > 1:
+                self.filein = open(sys.argv[1], 'r')
+            else:
+                self.filein = sys.stdin
+
+            if len(sys.argv) > 2:
+                self.fileout = open(sys.argv[2], 'w')
+            else:
+                self.fileout = sys.stdout
         except IOError as e:
             print('Cannot open file {}!'.format(e.filename), file=sys.stderr)
             sys.exit(1)
