@@ -9,20 +9,22 @@ class Graph:
     Represents Directed Weighted Graph
     """
 
-    def __init__(self, E, V, edges):
+    def __init__(self, V, E, edges):
         """
         (int, int, list of Edge) -> void
         Args:
-            E is the number of vertexes
-            V is the number of edges
+            V is the number of vertexes
+            E is the number of edges
             edges is the list of Edge objects
         """
-        self.__E = E
         self.__V = V
-        self.__edges = edges
+        self.__E = E
+        self.__adj = [[] for i in range(V)]
+        for e in edges:
+            self.__adj[e.source].append(e)
 
     @classmethod
-    def fromfile(cls, readobj):
+    def fromfile(cls, readobj, one_indexation=True):
         """
         (file) -> Graph
         Initialize object from readable file
@@ -34,7 +36,10 @@ class Graph:
         V, E = map(int, readobj.readline().split())
         edges = []
         for line in readobj:
-            source, dest, width = map(int, readobj.readline().split())
+            source, dest, width = map(int, line.split())
+            if one_indexation:
+                source -= 1
+                dest -= 1
             edges.append(Edge(source, dest, width))
         return cls(V, E, edges)
 
@@ -60,7 +65,7 @@ class Graph:
         Return:
             full list of edges in graph
         """
-        return itertools.chain(*self.__edges)
+        return list(itertools.chain(*self.__adj))
 
     def adj(self, source):
         """
@@ -72,6 +77,20 @@ class Graph:
         """
         assert 0 <= source < self.V()
         return self.__edges[source]
+
+    def reverse(self):
+        return Graph(
+            self.V(),
+            self.E(),
+            [e.reverse() for e in self.edges()]
+        )
+
+    def __str__(self):
+        result = '{}\n{}\n{}'.format(
+            self.V(),
+            self.E(),
+            '\n'.join(map(str, self.edges())))
+        return result
 
 
 class Edge:
@@ -89,3 +108,34 @@ class Edge:
         self.source = source
         self.dest = dest
         self.weight = weight
+
+    def reverse(self):
+        """
+        () -> Edge
+        Return:
+            edge with reversed direction
+        """
+        return Edge(self.dest, self.source, self.weight)
+
+    def to_zero_based(self):
+        """
+        () -> Edge
+        Change to 0-based index. Call only if 1-based now!
+        """
+        return Edge(self.source - 1, self.dest - 1, self.weight)
+
+    def to_one_based(self):
+        """
+        () -> Edge
+        Change to 1-based index. Call only if 0-based now!
+        """
+        return Edge(self.source + 1, self.dest + 1, self.weight)
+
+    def __str__(self):
+        """
+        () -> void
+        Return:
+            string representation
+        """
+        return '{} {} {}'.format(self.source, self.dest, self.weight)
+

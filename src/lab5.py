@@ -6,5 +6,4 @@ from graph.weighted.directed import Graph
 
 io = IO()
 graph = Graph.fromfile(io.filein)
-
-io.print('hello', end='!')
+io.print(graph)
