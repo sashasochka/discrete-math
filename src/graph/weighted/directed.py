@@ -20,8 +20,11 @@ class Graph:
         self.__V = V
         self.__E = E
         self.__adj = [[] for i in range(V)]
+        self.__negative = False
         for e in edges:
             self.__adj[e.source].append(e)
+            if e.negative():
+                self.__negative = True
 
     @classmethod
     def fromfile(cls, readobj, one_indexation=True):
@@ -78,6 +81,15 @@ class Graph:
         assert 0 <= source < self.V()
         return self.__edges[source]
 
+    def has_negative(self):
+        """
+        () -> boolean
+        Return:
+            True if graph has negative edges
+            else False
+        """
+        return self.__negative
+
     def reverse(self):
         return Graph(
             self.V(),
@@ -116,6 +128,15 @@ class Edge:
             edge with reversed direction
         """
         return Edge(self.dest, self.source, self.weight)
+
+    def negative(self):
+        """
+        () -> boolean
+        Return:
+            True if weight is negative
+            else False
+        """
+        return self.weight < 0
 
     def to_zero_based(self):
         """
