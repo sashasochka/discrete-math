@@ -73,10 +73,30 @@ class UserIO:
         val = None  # read integer
         repeat = True
         while repeat:
-            print('Input {} (in range [{};{})'.format(label, start, stop))
+            print('Input {} (in range [{}; {}]: '.format(label, start, stop-1))
             try:
                 val = int(input())
                 repeat = False
             except ValueError:
                 print('Cannot read as integer!')
         return val
+
+    def readvertex(self, V: int, label: str='') -> int:
+        """
+        Read and return the number of vertex given there are V vertexes
+        Return:
+            0-based vertex index
+        """
+        return self.readint(1, V + 1, label + ' vertex number') - 1
+
+    def print(self, *args, **kwargs):
+        print(*args, **kwargs)
+
+    def print_list(self, lst: list):
+        print(str(lst))
+
+    def print_numbered_list(self, lst: list, label: str='Value'):
+        self.print('{:3} | {}'.format('№.', label))
+        for i, val in enumerate(lst):
+            self.print('{:3} | {}'.format(i + 1, val))
+
