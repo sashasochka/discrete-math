@@ -4,7 +4,56 @@ Common for all labs functions
 import sys
 
 
-class IO:
+class UserIO:
+    """
+    Class for talking to user through stdin/stdout
+    """
+    def __init__(self):
+        self.sections = 0
+
+    def readint(self, start: int=-sys.maxsize, stop: int=sys.maxsize,
+                label: str='integer') -> int:
+        """
+        Read and return integer readed from input file after user prompt
+        Return:
+            read integer
+        """
+        val = None  # read integer
+        repeat = True
+        while repeat:
+            print('Input {} (in range [{}; {}]: '.format(label, start,
+                                                         stop - 1))
+            try:
+                val = int(input())
+                repeat = False
+            except ValueError:
+                print('Cannot read as integer!')
+        return val
+
+    def readvertex(self, V: int, label: str='') -> int:
+        """
+        Read and return the number of vertex given there are V vertexes
+        Return:
+            0-based vertex index
+        """
+        return self.readint(1, V + 1, label + ' vertex number') - 1
+
+    def print(self, *args, **kwargs):
+        print(*args, **kwargs)
+
+    def section(self, title):
+        self.sections += 1
+        self.print('\n' + '=' * 40)
+        self.print('{}) {}:\n'.format(self.sections, title))
+
+    def print_numbered_list(self, lst: list, label: str='Value'):
+        self.print('{:3} | {}'.format('№.', label))
+        for i, val in enumerate(lst):
+            self.print('{:3} | {}'.format(i + 1, val))
+        self.print()
+
+
+class IO(UserIO):
     """
     IO class which does file initialization from
     either command line argumnts or stdin/stdout
@@ -16,7 +65,9 @@ class IO:
         Initialize input and ouput file objects from command line options or
         if absent from stdin/stdout
         """
+        super().__init__()
         try:
+            self.user = UserIO()
             self.close_filein = False
             self.close_fileout = False
             if len(sys.argv) > 1:
@@ -57,46 +108,3 @@ class IO:
             self.filein.close()
         if self.close_fileout:
             self.fileout.close()
-
-
-class UserIO:
-    """
-    Class for talking to user through stdin/stdout
-    """
-    def readint(self, start: int=-sys.maxsize, stop: int=sys.maxsize,
-                label: str='integer') -> int:
-        """
-        Read and return integer readed from input file after user prompt
-        Return:
-            read integer
-        """
-        val = None  # read integer
-        repeat = True
-        while repeat:
-            print('Input {} (in range [{}; {}]: '.format(label, start, stop-1))
-            try:
-                val = int(input())
-                repeat = False
-            except ValueError:
-                print('Cannot read as integer!')
-        return val
-
-    def readvertex(self, V: int, label: str='') -> int:
-        """
-        Read and return the number of vertex given there are V vertexes
-        Return:
-            0-based vertex index
-        """
-        return self.readint(1, V + 1, label + ' vertex number') - 1
-
-    def print(self, *args, **kwargs):
-        print(*args, **kwargs)
-
-    def print_list(self, lst: list):
-        print(str(lst))
-
-    def print_numbered_list(self, lst: list, label: str='Value'):
-        self.print('{:3} | {}'.format('№.', label))
-        for i, val in enumerate(lst):
-            self.print('{:3} | {}'.format(i + 1, val))
-
