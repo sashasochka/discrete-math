@@ -97,7 +97,41 @@ def dijkstra(G: Graph, s: int) -> list:
         if p is None and i != s:
             dist[i] = None
 
-    nodesList = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
-    return PathSearchResults(s, nodesList)
+    nodes_list = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
+    return PathSearchResults(s, nodes_list)
+
+
+def bellman_ford(G: Graph, s: int) -> list:
+    """
+    Args:
+        G - graph we search distances in
+        s - number (index) of source vertex in G
+    Return:
+        PathSearchResults object
+    """
+    parent = [None] * G.V()
+    dist = [sys.maxsize] * G.V()
+    dist[s] = 0
+    for i in range(G.V()):
+        changed = False
+        for e in G.edges():
+            if parent[e.source] is None and e.source != s:
+                continue
+            alternate_d = dist[e.source] + e.weight
+            if alternate_d < dist[e.dest]:  # relaxation step
+                changed = True
+                parent[e.dest] = e.source
+                dist[e.dest] = alternate_d
+        if not changed:
+            break
+    else:  # not breaked - then here is a negative cycle
+        return None
+
+    for i, p in enumerate(parent):
+        if p is None and i != s:
+            dist[i] = None
+
+    nodes_list = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
+    return PathSearchResults(s, nodes_list)
 
 
