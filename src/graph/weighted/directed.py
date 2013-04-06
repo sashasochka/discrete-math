@@ -19,7 +19,7 @@ class Graph:
         """
         self.__V = V
         self.__E = E
-        self.__adj = [[] for i in range(V)]
+        self.__adj = [[] for _ in range(V)]
         self.__negative = False
         for e in edges:
             self.__adj[e.source].append(e)
@@ -74,7 +74,7 @@ class Graph:
             list of all edges incident to source
         """
         assert 0 <= source < self.V()
-        return self.__edges[source]
+        return self.__adj[source]
 
     def has_negative(self) -> bool:
         """
