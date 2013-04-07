@@ -1,11 +1,11 @@
 """
 Includes weighted directed graph classes
 """
-import itertools
 import sys
+import graph.weighted
 
 
-class Graph:
+class Graph(graph.weighted.Graph):
     """
     Represents Directed Weighted Graph
     """
@@ -17,14 +17,15 @@ class Graph:
             E is the number of edges
             edges is the list of Edge objects
         """
-        self.__V = V
-        self.__E = E
-        self.__adj = [[] for _ in range(V)]
-        self.__negative = False
+        self._V = V
+        self._E = E
+        self._edges = edges
+        self._adj = [[] for _ in range(V)]
+        self._negative = False
         for e in edges:
-            self.__adj[e.source].append(e)
+            self._adj[e.source].append(e)
             if e.negative():
-                self.__negative = True
+                self._negative = True
 
     @classmethod
     def fromfile(cls, readobj: type(sys.stdin), one_indexation: bool=True):
@@ -45,45 +46,6 @@ class Graph:
             edges.append(Edge(source, dest, width))
         return cls(V, E, edges)
 
-    def V(self) -> int:
-        """
-        Return:
-            number of vertexes
-        """
-        return self.__V
-
-    def E(self) -> int:
-        """
-        Return:
-            number of edges
-        """
-        return self.__E
-
-    def edges(self) -> list:
-        """
-        Return:
-            list of edges in graph
-        """
-        return list(itertools.chain(*self.__adj))
-
-    def adj(self, source: int) -> list:
-        """
-        Args:
-            source - vertex number
-        Return:
-            list of all edges incident to source
-        """
-        assert 0 <= source < self.V()
-        return self.__adj[source]
-
-    def has_negative(self) -> bool:
-        """
-        Return:
-            True if graph has negative edges
-            else False
-        """
-        return self.__negative
-
     def reverse(self) -> 'Graph':
         return Graph(
             self.V(),
@@ -91,15 +53,8 @@ class Graph:
             [e.reverse() for e in self.edges()]
         )
 
-    def __str__(self) -> str:
-        result = '{}\n{}\n{}'.format(
-            self.V(),
-            self.E(),
-            '\n'.join(map(str, self.edges())))
-        return result
 
-
-class Edge:
+class Edge(graph.weighted.Edge):
     """
     Represent directed weighted edge
     """
@@ -121,34 +76,9 @@ class Edge:
         """
         return Edge(self.dest, self.source, self.weight)
 
-    def negative(self) -> bool:
-        """
-        Return:
-            True if weight is negative
-            else False
-        """
-        return self.weight < 0
+    def either(self):
+        return self.source
 
-    def to_zero_based(self) -> 'Edge':
-        """
-        Change to 0-based index. Call only if 1-based now!
-        Return:
-            edge with decreased vertexes numbers by one
-        """
-        return Edge(self.source - 1, self.dest - 1, self.weight)
-
-    def to_one_based(self) -> 'Edge':
-        """
-        Change to 1-based index. Call only if 0-based now!
-        Return:
-            edge with increased vertexes numbers by one
-        """
-        return Edge(self.source + 1, self.dest + 1, self.weight)
-
-    def __str__(self) -> str:
-        """
-        Return:
-            string representation
-        """
-        return '{} {} {}'.format(self.source, self.dest, self.weight)
+    def othre(self):
+        return self.dest
 

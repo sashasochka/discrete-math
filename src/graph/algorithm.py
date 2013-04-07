@@ -4,7 +4,7 @@ Works only with zero-based graphs
 """
 import sys
 import heapq
-from graph.weighted.directed import Graph
+from graph import Graph
 
 
 class PathSearchNode:
