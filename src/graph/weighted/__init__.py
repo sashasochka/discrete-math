@@ -4,24 +4,6 @@ Abstract classes for weighted graph
 import graph
 
 
-class Graph(graph.Graph):
-    """
-    Represents Directed Weighted Graph
-    """
-
-    def __init__(self):
-        """
-        Args:
-            V is the number of vertexes
-            E is the number of edges
-            edges is the list of Edge objects
-        """
-        raise NotImplementedError
-
-    def weight(self) -> int:
-        return sum([e.weight for e in self.edges()])
-
-
 class Edge(graph.Edge):
     """
     Represent directed weighted edge
@@ -51,3 +33,20 @@ class Edge(graph.Edge):
         """
         return '{} {} {}'.format(self.either(), self.other(), self.weight)
 
+
+class Graph(graph.Graph):
+    """
+    Represents Directed Weighted Graph
+    """
+
+    def __init__(self):
+        """
+        Args:
+            V is the number of vertexes
+            E is the number of edges
+            edges is the list of Edge objects
+        """
+        raise NotImplementedError
+
+    def weight(self) -> int:
+        return sum([e.weight for e in self.edges()])

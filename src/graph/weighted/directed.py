@@ -5,6 +5,35 @@ import sys
 import graph.weighted
 
 
+class Edge(graph.weighted.Edge):
+    """
+    Represent directed weighted edge
+    """
+    def __init__(self, source: int, dest: int, weight: int):
+        """
+        Args:
+            source - is a source vertex
+            dest - is a destination vertex
+            weight - is a weight of this edge
+        """
+        self.source = source
+        self.dest = dest
+        self.weight = weight
+
+    def reverse(self) -> 'Edge':
+        """
+        Return:
+            edge with reversed direction
+        """
+        return Edge(self.dest, self.source, self.weight)
+
+    def either(self):
+        return self.source
+
+    def other(self):
+        return self.dest
+
+
 class Graph(graph.weighted.Graph):
     """
     Represents Directed Weighted Graph
@@ -46,39 +75,16 @@ class Graph(graph.weighted.Graph):
             edges.append(Edge(source, dest, width))
         return cls(V, E, edges)
 
+    def add_edge(self, edge: Edge):
+        assert 0 <= edge.source < self.V()
+        assert 0 <= edge.dest < self.V()
+        self._edges.append(edge)
+        self._adj[edge.source].append(edge)
+
     def reverse(self) -> 'Graph':
         return Graph(
             self.V(),
             self.E(),
             [e.reverse() for e in self.edges()]
         )
-
-
-class Edge(graph.weighted.Edge):
-    """
-    Represent directed weighted edge
-    """
-    def __init__(self, source: int, dest: int, weight: int):
-        """
-        Args:
-            source - is a source vertex
-            dest - is a destination vertex
-            weight - is a weight of this edge
-        """
-        self.source = source
-        self.dest = dest
-        self.weight = weight
-
-    def reverse(self) -> 'Edge':
-        """
-        Return:
-            edge with reversed direction
-        """
-        return Edge(self.dest, self.source, self.weight)
-
-    def either(self):
-        return self.source
-
-    def other(self):
-        return self.dest
 

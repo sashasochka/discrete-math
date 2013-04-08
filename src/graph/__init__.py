@@ -4,6 +4,39 @@ Abstract graph classes
 import sys
 
 
+class Edge:
+    """
+    Represent abstract edge
+    """
+
+    def to_zero_based(self) -> 'Edge':
+        """
+        Change to 0-based index. Call only if 1-based now!
+        Return:
+            edge with decreased vertexes numbers by one
+        """
+        raise NotImplementedError
+
+    def to_one_based(self) -> 'Edge':
+        """
+        Change to 1-based index. Call only if 0-based now!
+        Return:
+            edge with increased vertexes numbers by one
+        """
+        raise NotImplementedError
+
+    def either(self) -> int:
+        """
+        Return 1st vertex number
+        """
+        raise NotImplementedError
+
+    def other(self) -> int:
+        """
+        Return 2nd vertex number
+        """
+
+
 class Graph:
     """
     Represents abstract graph
@@ -72,43 +105,16 @@ class Graph:
         """
         return self._negative
 
+    def add_vertex(self):
+        self._V += 1
+        self._adj.append([])
+
+    def add_edge(self, edge: Edge):
+        raise NotImplementedError
+
     def __str__(self) -> str:
         result = '{}\n{}\n{}'.format(
             self._V,
             self._E,
             '\n'.join(map(str, self.edges())))
         return result
-
-
-class Edge:
-    """
-    Represent abstract edge
-    """
-
-    def to_zero_based(self) -> 'Edge':
-        """
-        Change to 0-based index. Call only if 1-based now!
-        Return:
-            edge with decreased vertexes numbers by one
-        """
-        raise NotImplementedError
-
-    def to_one_based(self) -> 'Edge':
-        """
-        Change to 1-based index. Call only if 0-based now!
-        Return:
-            edge with increased vertexes numbers by one
-        """
-        raise NotImplementedError
-
-    def either(self) -> int:
-        """
-        Return 1st vertex number
-        """
-        raise NotImplementedError
-
-    def other(self) -> int:
-        """
-        Return 2nd vertex number
-        """
-
