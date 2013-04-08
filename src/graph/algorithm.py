@@ -102,7 +102,7 @@ def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
 def forwardtrace_path_from_all_to_all(
         search_results: AllToAllPathSearchResults, s: int, t: int) -> list:
     path = [s]
-    while search_results[s][t].parent not in [None, undefined_node]:
+    while search_results[s][t].child not in [None, undefined_node]:
         s = search_results[s][t].child
         path.append(s)
     if path[-1] == t:
