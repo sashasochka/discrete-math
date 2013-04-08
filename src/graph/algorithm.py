@@ -64,7 +64,7 @@ class OneToAllPathSearchResults:
         return [self[i].parent for i in range(len(self))]
 
 
-class AllToAllPathSearchResults:
+class AllToAllPathSearchResults(list):
     """
     Represents results of all-to-all searching algorithm
     """
@@ -73,16 +73,7 @@ class AllToAllPathSearchResults:
         Args:
             matrix - matrix list of OneToAllPathSearchResults objects
         """
-        self.matrix = matrix
-
-    def __getitem__(self, s: int) -> list:
-        """
-        Return PathSearchResults from s
-        """
-        return self.matrix[s]
-
-    def __len__(self):
-        return len(self.matrix)
+        super().__init__(matrix)
 
 
 def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
@@ -90,7 +81,9 @@ def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
     Return path from s to t from given precomputed path search results
     """
     path = [t]
-    while search_results[t].parent is not None:
+    while search_results[t].parent not in [None, undefined_node]:
+        assert search_results[t].parent != undefined_node, \
+            "Undefined parent while backtracing path"
         t = search_results[t].parent
         path.append(t)
     if path[-1] == search_results.source:
@@ -111,7 +104,8 @@ def dijkstra(G: Graph, s: int) -> OneToAllPathSearchResults:
     if G.has_negative():
         return None
     found = [False] * G.V()
-    parent = [None] * G.V()
+    parent = [undefined_node] * G.V()
+    parent[s] = None
     dist = [sys.maxsize] * G.V()
     dist[s] = 0
     heap = [(0, s)]  # heap of tuples of dist. and vert. number.
@@ -128,7 +122,7 @@ def dijkstra(G: Graph, s: int) -> OneToAllPathSearchResults:
                 heapq.heappush(heap, (dist[e.dest], e.dest))
 
     for i, p in enumerate(parent):
-        if p is None and i != s:
+        if p == undefined_node and i != s:
             dist[i] = None
 
     nodes_list = [PathSearchNode(d, undefined_node, p) for d, p in zip(dist,
@@ -144,13 +138,14 @@ def bellman_ford(G: Graph, s: int) -> OneToAllPathSearchResults:
     Return:
         PathSearchResults object
     """
-    parent = [None] * G.V()
+    parent = [undefined_node] * G.V()
+    parent[s] = None
     dist = [sys.maxsize] * G.V()
     dist[s] = 0
     for i in range(G.V()):
         changed = False
         for e in G.edges():
-            if parent[e.source] is None and e.source != s:
+            if parent[e.source] == undefined_node and e.source != s:
                 continue
             alternate_d = dist[e.source] + e.weight
             if alternate_d < dist[e.dest]:  # relaxation step
@@ -163,7 +158,7 @@ def bellman_ford(G: Graph, s: int) -> OneToAllPathSearchResults:
         return None
 
     for i, p in enumerate(parent):
-        if p is None and i != s:
+        if p == undefined_node and i != s:
             dist[i] = None
 
     nodes_list = [PathSearchNode(d, undefined_node, p) for d, p in zip(dist,
