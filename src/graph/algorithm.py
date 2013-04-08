@@ -40,7 +40,7 @@ class OneToAllPathSearchResults:
     def __getitem__(self, index: int) -> PathSearchNode:
         return self.lst[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.lst)
 
     def distances(self) -> list:
