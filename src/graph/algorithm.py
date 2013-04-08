@@ -102,11 +102,13 @@ def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
 def forwardtrace_path_from_all_to_all(
         search_results: AllToAllPathSearchResults, s: int, t: int) -> list:
     path = [s]
-    while s != t:
+    while search_results[s][t].parent not in [None, undefined_node]:
         s = search_results[s][t].child
-        assert s not in [None, undefined_node]
         path.append(s)
-    return path
+    if path[-1] == t:
+        return path
+    else:
+        return None
 
 
 def distance_matrix(search_results: AllToAllPathSearchResults) -> list:
@@ -251,7 +253,7 @@ def johnson(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
     # 1) construct new graph with additional vertex (
     Gq = deepcopy(G)
     q = Gq.add_vertex()  # new vertex number
-    for i in range(G.V() - 1):
+    for i in range(Gq.V() - 1):
         Gq.add_edge(WeightedDirectedEdge(q, i, 0))
 
     # 2) compute distances from q (new vertex)
@@ -273,6 +275,7 @@ def johnson(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
     for i in range(G_mod.V()):
         result.append(dijkstra(G_mod, i))
         for j, r in enumerate(result[-1]):
-            r.distance -= h[i] - h[j]
+            if r.distance is not None:
+                r.distance -= h[i] - h[j]
 
     return result
