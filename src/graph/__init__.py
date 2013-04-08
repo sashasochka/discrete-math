@@ -114,7 +114,7 @@ class Graph:
         raise NotImplementedError
 
     def __str__(self) -> str:
-        result = '{}\n{}\n{}'.format(
+        result = '{} {}\n{}'.format(
             self._V,
             self._E,
             '\n'.join(map(str, self.edges())))
