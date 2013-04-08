@@ -7,15 +7,20 @@ import heapq
 from graph import Graph
 
 
+undefined_node = -1
+
+
 class PathSearchNode:
     """
     Represents a node for distance searching
     """
-    def __init__(self, distance: int, parent: int):
+
+    def __init__(self, distance: int, child: int, parent: int):
         """
         Initialize public fields from arguments
         """
         self.distance = distance
+        self.child = child
         self.parent = parent
 
 
@@ -23,6 +28,7 @@ class OneToAllPathSearchResults:
     """
     Represents results of distance/path finding algorithm (e.g. dijkstra)
     """
+
     def __init__(self, source: int, lst: list):
         """
         Initialize by a list of PathSearchNode objects
@@ -43,10 +49,17 @@ class OneToAllPathSearchResults:
         """
         return [self[i].distance for i in range(len(self))]
 
+    def children(self) -> list:
+        """
+        Return:
+            A list of children nodes (next nodes in path)
+        """
+        return [self[i].parent for i in range(len(self))]
+
     def parents(self) -> list:
         """
         Return:
-            A list of distances to each node
+            A list of parent nodes
         """
         return [self[i].parent for i in range(len(self))]
 
@@ -97,7 +110,8 @@ def dijkstra(G: Graph, s: int) -> list:
         if p is None and i != s:
             dist[i] = None
 
-    nodes_list = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
+    nodes_list = [PathSearchNode(d, undefined_node, p) for d, p in zip(dist,
+                                                                       parent)]
     return OneToAllPathSearchResults(s, nodes_list)
 
 
@@ -131,7 +145,8 @@ def bellman_ford(G: Graph, s: int) -> list:
         if p is None and i != s:
             dist[i] = None
 
-    nodes_list = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
+    nodes_list = [PathSearchNode(d, undefined_node, p) for d, p in zip(dist,
+                                                                       parent)]
     return OneToAllPathSearchResults(s, nodes_list)
 
 
