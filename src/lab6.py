@@ -35,3 +35,23 @@ else:
     else:
         io.print('Path from #{} to #{}:'.format(s + 1, t + 1))
         io.print(' -> '.join([str(i + 1) for i in path]))
+
+# Johnson's part
+io.section('Johnson\'s algorithm')
+search_results = algorithm.johnson(G)
+if search_results is None:
+    io.print('Cannot find distance using Johnson - negative cycles are '
+             'present')
+else:
+    # print distance matrix
+    io.print('Distance matrix: ')
+    io.print_matrix(algorithm.distance_matrix(search_results), 's\\t')
+
+    # print path from s to t
+    path = algorithm.backtrace_path(search_results[s], t)
+    if path is None:
+        io.print('There is no path from vertex #{} to #{}'.format(s + 1,
+                                                                  t + 1))
+    else:
+        io.print('Path from #{} to #{}:'.format(s + 1, t + 1))
+        io.print(' -> '.join([str(i + 1) for i in path]))
