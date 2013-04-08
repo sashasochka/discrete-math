@@ -4,7 +4,8 @@ Works only with zero-based graphs
 """
 import sys
 import heapq
-from graph import Graph
+from graph.weighted import Graph as WeightedGraph
+from graph.weighted.directed import Graph as WeightedDirectedGraph
 
 
 undefined_node = -1
@@ -110,7 +111,7 @@ def distance_matrix(search_results: AllToAllPathSearchResults) -> list:
     return matrix
 
 
-def dijkstra(G: Graph, s: int) -> OneToAllPathSearchResults:
+def dijkstra(G: WeightedGraph, s: int) -> OneToAllPathSearchResults:
     """
     Args:
         G - graph we search distances in
@@ -148,7 +149,7 @@ def dijkstra(G: Graph, s: int) -> OneToAllPathSearchResults:
     return OneToAllPathSearchResults(s, nodes_list)
 
 
-def bellman_ford(G: Graph, s: int) -> OneToAllPathSearchResults:
+def bellman_ford(G: WeightedDirectedGraph, s: int) -> OneToAllPathSearchResults:
     """
     Args:
         G - graph we search distances in
@@ -184,7 +185,7 @@ def bellman_ford(G: Graph, s: int) -> OneToAllPathSearchResults:
     return OneToAllPathSearchResults(s, nodes_list)
 
 
-def floyd_warshall(G: Graph) -> AllToAllPathSearchResults:
+def floyd_warshall(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
     """
     Args:
         G - graph to perform search in
