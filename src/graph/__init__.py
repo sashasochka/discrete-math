@@ -105,9 +105,10 @@ class Graph:
         """
         return self._negative
 
-    def add_vertex(self):
+    def add_vertex(self) -> int:
         self._V += 1
         self._adj.append([])
+        return self._V - 1
 
     def add_edge(self, edge: Edge):
         raise NotImplementedError
