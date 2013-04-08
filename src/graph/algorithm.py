@@ -4,8 +4,10 @@ Works only with zero-based graphs
 """
 import sys
 import heapq
+from copy import deepcopy
 from graph.weighted import Graph as WeightedGraph
 from graph.weighted.directed import Graph as WeightedDirectedGraph
+from graph.weighted.directed import Edge as WeightedDirectedEdge
 
 
 undefined_node = -1
@@ -39,6 +41,9 @@ class OneToAllPathSearchResults:
 
     def __getitem__(self, index: int) -> PathSearchNode:
         return self.lst[index]
+
+    def __iter__(self):
+        return self.lst.__iter__()
 
     def __len__(self) -> int:
         return len(self.lst)
@@ -231,5 +236,43 @@ def floyd_warshall(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
         for j, res in enumerate(row):
             if res.distance == sys.maxsize:
                 res.distance = None
+
+    return result
+
+
+def johnson(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
+    """
+    Perform all-to-all graph search
+    Args:
+        G - graph to perform search in
+    Return:
+        Results of search in AllToAllPathSearchResults with filled parent field
+    """
+    # 1) construct new graph with additional vertex (
+    Gq = deepcopy(G)
+    q = Gq.add_vertex()  # new vertex number
+    for i in range(G.V() - 1):
+        Gq.add_edge(WeightedDirectedEdge(q, i, 0))
+
+    # 2) compute distances from q (new vertex)
+    bellman_results = bellman_ford(Gq, q)
+    if bellman_results is None:  # negative cycle
+        return None
+    h = bellman_results.distances()[:-1]
+    del Gq
+
+    # 3) Create modificated graph without negative edges
+    edges_mod = []
+    for e in G.edges():
+        new_weight = e.weight + h[e.source] - h[e.dest]
+        edges_mod.append(WeightedDirectedEdge(e.source, e.dest, new_weight))
+    G_mod = WeightedDirectedGraph(G.V(), G.E(), edges_mod)
+
+    # 4) Perform dijkstra searches in this graph
+    result = AllToAllPathSearchResults([])
+    for i in range(G_mod.V()):
+        result.append(dijkstra(G_mod, i))
+        for j, r in enumerate(result[-1]):
+            r.distance -= h[i] - h[j]
 
     return result
