@@ -64,6 +64,27 @@ class OneToAllPathSearchResults:
         return [self[i].parent for i in range(len(self))]
 
 
+class AllToAllPathSearchResults:
+    """
+    Represents results of all-to-all searching algorithm
+    """
+    def __init__(self, matrix: list):
+        """
+        Args:
+            matrix - matrix list of OneToAllPathSearchResults objects
+        """
+        self.matrix = matrix
+
+    def __getitem__(self, s: int) -> list:
+        """
+        Return PathSearchResults from s
+        """
+        return self.matrix[s]
+
+    def __len__(self):
+        return len(self.matrix)
+
+
 def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
     """
     Return path from s to t from given precomputed path search results
@@ -148,5 +169,3 @@ def bellman_ford(G: Graph, s: int) -> list:
     nodes_list = [PathSearchNode(d, undefined_node, p) for d, p in zip(dist,
                                                                        parent)]
     return OneToAllPathSearchResults(s, nodes_list)
-
-
