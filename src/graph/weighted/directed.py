@@ -79,6 +79,6 @@ class Edge(graph.weighted.Edge):
     def either(self):
         return self.source
 
-    def othre(self):
+    def other(self):
         return self.dest
 
