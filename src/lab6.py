@@ -7,8 +7,11 @@ io = IO()
 userio = UserIO()
 G = Graph.fromfile(io.filein)
 
+# later defined source and destination vertexes
+s = 0
+t = 0
 
-# floyd-warshall part
+# Floyd-Warshall's part
 io.section('Floyd-Warshall\'s algorithm')
 search_results = algorithm.floyd_warshall(G)
 if search_results is None:
@@ -19,13 +22,13 @@ else:
     io.print('Distance matrix: ')
     io.print_matrix(algorithm.distance_matrix(search_results), 's\\t')
 
-
+    # ask user for source and destination vertexes
     s = userio.readvertex(G.V(), 'source')
     t = userio.readvertex(G.V(), 'destination')
 
     # print path from s to t
     path = algorithm.forwardtrace_path_from_all_to_all(search_results, s,
-                                                           t)
+                                                       t)
     if path is None:
         io.print('There is no path from vertex #{} to #{}'.format(s + 1,
                                                                   t + 1))
