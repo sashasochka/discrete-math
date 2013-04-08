@@ -253,7 +253,7 @@ def johnson(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
     # 1) construct new graph with additional vertex (
     Gq = deepcopy(G)
     q = Gq.add_vertex()  # new vertex number
-    for i in range(Gq.V() - 1):
+    for i in range(G.V()):
         Gq.add_edge(WeightedDirectedEdge(q, i, 0))
 
     # 2) compute distances from q (new vertex)
