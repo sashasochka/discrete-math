@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-from common import IO
+from common import IO, UserIO
 from graph import algorithm
 from graph.weighted.directed import Graph
 
 
 io = IO()
+userio = UserIO()
 G = Graph.fromfile(io.filein)
 
-s = io.user.readvertex(G.V(), 'source')
-t = io.user.readvertex(G.V(), 'destination')
+s = userio.readvertex(G.V(), 'source')
+t = userio.readvertex(G.V(), 'destination')
 
 # dijkstra part
 io.section('Dijkstra\'s algorithm')

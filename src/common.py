@@ -8,9 +8,6 @@ class UserIO:
     """
     Class for talking to user through stdin/stdout
     """
-    def __init__(self):
-        self.sections = 0
-
     def readint(self, start: int=-sys.maxsize, stop: int=sys.maxsize,
                 label: str='integer') -> int:
         """
@@ -41,19 +38,8 @@ class UserIO:
     def print(self, *args, **kwargs):
         print(*args, **kwargs)
 
-    def section(self, title):
-        self.sections += 1
-        self.print('\n' + '=' * 40)
-        self.print('{}) {}:\n'.format(self.sections, title))
 
-    def print_numbered_list(self, lst: list, label: str='Value'):
-        self.print('{:3} | {}'.format('№.', label))
-        for i, val in enumerate(lst):
-            self.print('{:3} | {}'.format(i + 1, val))
-        self.print()
-
-
-class IO(UserIO):
+class IO:
     """
     IO class which does file initialization from
     either command line argumnts or stdin/stdout
@@ -65,11 +51,10 @@ class IO(UserIO):
         Initialize input and ouput file objects from command line options or
         if absent from stdin/stdout
         """
-        super().__init__()
+        self.sections = 0
+        self.close_filein = False
+        self.close_fileout = False
         try:
-            self.user = UserIO()
-            self.close_filein = False
-            self.close_fileout = False
             if len(sys.argv) > 1:
                 self.filein = open(sys.argv[1], 'r')
                 self.close_filein = True
@@ -85,13 +70,6 @@ class IO(UserIO):
             print('Cannot open file {}!'.format(e.filename), file=sys.stderr)
             sys.exit(1)
 
-    def print(self, *args: list, **kwargs: dict):
-        """
-        Works as builtin print except that prints to fileout
-        """
-        kwargs['file'] = self.fileout
-        print(*args, **kwargs)
-
     def readline(self) -> str:
         """
         Read and return string readed from input file
@@ -99,6 +77,24 @@ class IO(UserIO):
             readed string
         """
         return self.filein.readline()
+
+    def print(self, *args: list, **kwargs: dict):
+        """
+        Works as builtin print except that prints to fileout
+        """
+        kwargs['file'] = self.fileout
+        print(*args, **kwargs)
+
+    def section(self, title):
+        self.sections += 1
+        self.print('\n' + '=' * 40)
+        self.print('{}) {}:\n'.format(self.sections, title))
+
+    def print_numbered_list(self, lst: list, label: str='Value'):
+        self.print('{:3} | {}'.format('№.', label))
+        for i, val in enumerate(lst):
+            self.print('{:3} | {}'.format(i + 1, val))
+        self.print()
 
     def __del__(self):
         """
