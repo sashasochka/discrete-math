@@ -99,7 +99,7 @@ def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
         return None
 
 
-def dijkstra(G: Graph, s: int) -> list:
+def dijkstra(G: Graph, s: int) -> OneToAllPathSearchResults:
     """
     Args:
         G - graph we search distances in
@@ -136,7 +136,7 @@ def dijkstra(G: Graph, s: int) -> list:
     return OneToAllPathSearchResults(s, nodes_list)
 
 
-def bellman_ford(G: Graph, s: int) -> list:
+def bellman_ford(G: Graph, s: int) -> OneToAllPathSearchResults:
     """
     Args:
         G - graph we search distances in
