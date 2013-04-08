@@ -96,6 +96,19 @@ class IO:
             self.print('{:3} | {}'.format(i + 1, val))
         self.print()
 
+    def print_matrix(self, matrix: list, title: str=''):
+        self.print('{:5}|'.format(title), end='')
+        for i in range(len(matrix)):
+            self.print('{:4}|'.format(i + 1), end='')
+        self.print()
+        self.print('-' * (5 + len(matrix) * 5))
+        for i, row in enumerate(matrix):
+            self.print('{:5}|'.format(i + 1), end='')
+            for val in row:
+                self.print('{:4}|'.format(val), end='')
+            self.print()
+        self.print()
+
     def __del__(self):
         """
         Close opened files if needed
