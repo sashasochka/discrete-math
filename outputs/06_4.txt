@@ -1,0 +1,10 @@
+
+========================================
+1) Floyd-Warshall's algorithm:
+
+Cannot find distance using Floyd-Warshall - negative cycles are present
+
+========================================
+2) Johnson's algorithm:
+
+Cannot find distance using Johnson - negative cycles are present
