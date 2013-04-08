@@ -19,7 +19,7 @@ class PathSearchNode:
         self.parent = parent
 
 
-class PathSearchResults:
+class OneToAllPathSearchResults:
     """
     Represents results of distance/path finding algorithm (e.g. dijkstra)
     """
@@ -51,7 +51,7 @@ class PathSearchResults:
         return [self[i].parent for i in range(len(self))]
 
 
-def backtrace_path(search_results: PathSearchResults, t: int) -> list:
+def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
     """
     Return path from s to t from given precomputed path search results
     """
@@ -98,7 +98,7 @@ def dijkstra(G: Graph, s: int) -> list:
             dist[i] = None
 
     nodes_list = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
-    return PathSearchResults(s, nodes_list)
+    return OneToAllPathSearchResults(s, nodes_list)
 
 
 def bellman_ford(G: Graph, s: int) -> list:
@@ -132,6 +132,6 @@ def bellman_ford(G: Graph, s: int) -> list:
             dist[i] = None
 
     nodes_list = [PathSearchNode(d, p) for d, p in zip(dist, parent)]
-    return PathSearchResults(s, nodes_list)
+    return OneToAllPathSearchResults(s, nodes_list)
 
 
