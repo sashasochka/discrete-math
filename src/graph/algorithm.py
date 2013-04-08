@@ -68,6 +68,7 @@ class AllToAllPathSearchResults(list):
     """
     Represents results of all-to-all searching algorithm
     """
+
     def __init__(self, matrix: list):
         """
         Args:
@@ -90,6 +91,23 @@ def backtrace_path(search_results: OneToAllPathSearchResults, t: int) -> list:
         return list(reversed(path))
     else:
         return None
+
+
+def forwardtrace_path_from_all_to_all(
+        search_results: AllToAllPathSearchResults, s: int, t: int) -> list:
+    path = [s]
+    while s != t:
+        s = search_results[s][t].child
+        assert s not in [None, undefined_node]
+        path.append(s)
+    return path
+
+
+def distance_matrix(search_results: AllToAllPathSearchResults) -> list:
+    matrix = []
+    for node_list in search_results:
+        matrix.append([node.distance for node in node_list])
+    return matrix
 
 
 def dijkstra(G: Graph, s: int) -> OneToAllPathSearchResults:
@@ -164,3 +182,53 @@ def bellman_ford(G: Graph, s: int) -> OneToAllPathSearchResults:
     nodes_list = [PathSearchNode(d, undefined_node, p) for d, p in zip(dist,
                                                                        parent)]
     return OneToAllPathSearchResults(s, nodes_list)
+
+
+def floyd_warshall(G: Graph) -> AllToAllPathSearchResults:
+    """
+    Args:
+        G - graph to perform search in
+    """
+    # basic init
+    result = AllToAllPathSearchResults([])
+    for i in range(G.V()):
+        nodes_list = []
+        for j in range(G.V()):
+            d = 0 if i == j else sys.maxsize
+            next_node = None if i == j else undefined_node
+            # noinspection PyTypeChecker
+            nodes_list.append(PathSearchNode(d, next_node, undefined_node))
+        result.append(OneToAllPathSearchResults(i, nodes_list))
+
+    # init as adjacency matrix
+    for e in G.edges():
+        r = result[e.source][e.dest]
+        if r.distance > e.weight:
+            r.distance = e.weight
+            r.child = e.dest
+
+    # algo
+    for k in range(G.V()):  # intermediate vertex
+        for i in range(G.V()):  # source vertex
+            for j in range(G.V()):  # destination vertex
+                # shortcuts
+                rij = result[i][j]
+                rik = result[i][k]
+                rkj = result[k][j]
+                if rik.distance == sys.maxsize or rkj.distance == sys.maxsize:
+                    continue
+                if rij.distance > rik.distance + rkj.distance:
+                    # relaxation step
+                    rij.distance = rik.distance + rkj.distance
+                    rij.child = result[i][k].child
+
+    for i in range(G.V()):
+        if result[i][i].distance < 0:  # negative cycle
+                return None
+
+    for i, row in enumerate(result):
+        for j, res in enumerate(row):
+            if res.distance == sys.maxsize:
+                res.distance = None
+
+    return result
