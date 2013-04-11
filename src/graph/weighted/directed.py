@@ -67,7 +67,8 @@ class Graph(graph.weighted.Graph):
         """
         V, E = map(int, readobj.readline().split())
         edges = []
-        for line in readobj:
+        for i in range(E):
+            line = readobj.readline()
             source, dest, width = map(int, line.split())
             if one_indexation:
                 source -= 1
