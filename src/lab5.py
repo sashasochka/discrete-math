@@ -30,7 +30,7 @@ else:
                                                                   t + 1))
     else:
         io.print('Path from #{} to #{}:'.format(s + 1, t + 1))
-        io.print(' -> '.join([str(i + 1) for i in path]))
+        io.print_path(path)
 
 # bellman-ford part
 # print distances from s to other vertexes
@@ -50,4 +50,4 @@ else:
                                                                   t + 1))
     else:
         io.print('Path from #{} to #{}:'.format(s + 1, t + 1))
-        io.print(' -> '.join([str(i + 1) for i in path]))
+        io.print_path(path)

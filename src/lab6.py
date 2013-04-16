@@ -34,7 +34,7 @@ else:
                                                                   t + 1))
     else:
         io.print('Path from #{} to #{}:'.format(s + 1, t + 1))
-        io.print(' -> '.join([str(i + 1) for i in path]))
+        io.print_path(path)
 
 # Johnson's part
 io.section('Johnson\'s algorithm')
@@ -54,4 +54,4 @@ else:
                                                                   t + 1))
     else:
         io.print('Path from #{} to #{}:'.format(s + 1, t + 1))
-        io.print(' -> '.join([str(i + 1) for i in path]))
+        io.print_path(path)
