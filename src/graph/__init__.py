@@ -98,14 +98,6 @@ class Graph:
         assert 0 <= source < self._V
         return self._adj[source]
 
-    def has_negative(self) -> bool:
-        """
-        Return:
-            True if graph has negative edges
-            else False
-        """
-        return self._negative
-
     def add_vertex(self) -> int:
         self._V += 1
         self._adj.append([])
