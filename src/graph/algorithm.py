@@ -5,10 +5,12 @@ Works only with zero-based graphs
 import sys
 import heapq
 from copy import deepcopy
+from graph.directed import Graph as DirectedGraph
+from graph.directed import Edge as DirectedEdge
+from graph.directed import GraphMatrix as DirectedGraphMatrix
 from graph.weighted import Graph as WeightedGraph
 from graph.weighted.directed import Graph as WeightedDirectedGraph
 from graph.weighted.directed import Edge as WeightedDirectedEdge
-
 
 undefined_node = -1
 
@@ -279,3 +281,192 @@ def johnson(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
                 r.distance -= h[i] - h[j]
 
     return result
+
+
+def flatten(lst: list) -> list:
+    res = []
+    for val in lst:
+        if hasattr(val, '__len__'):
+            res.extend(flatten(val))
+        else:
+            res.append(val)
+    return res
+
+
+def eulerian_cycle(G: DirectedGraphMatrix) -> list:
+    """
+    Find eulerian cycle in the given graph
+    Args:
+        graph to find eulerian cycle in
+    Return:
+        path of the cycle if found or None if not found
+    """
+    def selfloop(u: int):
+        nonlocal G
+        path = []
+        cur = u
+        while cur != u or not path:
+            path.append(cur)
+            (v, c) = G.adj(cur).__next__()
+            G.remove_edge(DirectedEdge(cur, v))
+            cur = v
+        path.append(u)
+        return path
+
+    G = deepcopy(G)
+    E = G.E()
+    tour = [0]
+    cur = 0
+    while cur < len(tour):
+        try:
+            G.adj(tour[cur]).__next__()
+            tour = tour[:cur] + selfloop(tour[cur]) + tour[cur + 1:]
+        except StopIteration:
+            cur += 1
+    return tour if len(tour) == E + 1 else None
+
+
+def eulerian_path(G: DirectedGraph) -> list:
+    """
+    Find eulerian path in the given graph
+    Args:
+        graph to find eulerian path in
+    Return:
+        path if found or None if not found
+    """
+
+    cycle = eulerian_cycle(G)
+    if cycle is not None:
+        return cycle
+
+    in_edges = [0] * G.V()
+    out_edges = [0] * G.V()
+    for u in range(G.V()):
+        for v, c in G.adj(u):
+            in_edges[v] += c
+            out_edges[u] += c
+
+    # start vertex
+    s = -1
+    cnt = 0
+    for v in range(G.V()):
+        if (in_edges[v] + out_edges[v]) % 2 == 1:
+            cnt += 1
+            if cnt > 2:
+                return None
+
+            if s == -1 or out_edges[s] % 2 == 0:
+                s = v
+    if s == -1:
+        return None
+
+    G = deepcopy(G)
+    E = G.E()
+
+    tour = []
+    cur = s
+    while True:
+        try:
+            tour.append(cur)
+            (v, c) = G.adj(cur).__next__()
+            G.remove_edge(DirectedEdge(cur, v))
+            cur = v
+        except StopIteration:
+            break
+
+    def selfloop(u: int):
+        nonlocal G
+        path = []
+        cur = u
+        while cur != u or not path:
+            path.append(cur)
+            (v, c) = G.adj(cur).__next__()
+            G.remove_edge(DirectedEdge(cur, v))
+            cur = v
+        path.append(u)
+        return path
+
+    index = 0
+    while index < len(tour):
+        try:
+            G.adj(tour[index]).__next__()
+            tour = tour[:index] + selfloop(tour[index]) + tour[index + 1:]
+        except StopIteration:
+            index += 1
+    return tour if len(tour) == E + 1 else None
+
+
+def hamiltonian_cycle(G: DirectedGraph) -> list:
+    """
+    Find hamiltonian cycle in the given graph
+    Args:
+        graph to find hamiltonian cycle in
+    Return:
+        path of the cycle if found or None if not found
+    """
+    if not G.V():
+        return []
+    if G.V() == 1:
+        return [0]
+
+    def dfs(last: int) -> list:
+        nonlocal visited, s
+        if len(visited) == G.V():
+            return [s] if s in G.adj(last) else None
+
+        for v in G.adj(last):
+            if v not in visited:
+                visited.add(v)
+                reversed_path = dfs(v)
+                if reversed_path is not None:
+                    reversed_path.append(v)
+                    return reversed_path
+                visited.remove(v)
+        return None
+
+    s = 0
+    visited = {s}
+    result = dfs(s)
+    if result is not None:
+        result.append(s)
+        result = list(reversed(result))
+        return result
+    else:
+        return None
+
+
+def hamiltonian_path(G: DirectedGraph) -> list:
+    """
+    Find hamiltonian path in the given graph
+    Args:
+        graph to find hamiltonian path in
+    Return:
+        path if found or None if not found
+    """
+    cycle = hamiltonian_cycle(G)
+    if cycle is not None:
+        return cycle
+
+    def dfs(last: int) -> list:
+        nonlocal visited, s
+        if len(visited) == G.V():
+            return []
+
+        for v in G.adj(last):
+            if v not in visited:
+                visited.add(v)
+                reversed_path = dfs(v)
+                if reversed_path is not None:
+                    reversed_path.append(v)
+                    return reversed_path
+                visited.remove(v)
+        return None
+
+    for s in range(G.V()):
+        visited = {s}
+        result = dfs(s)
+        if result is not None:
+            result.append(s)
+            result = list(reversed(result))
+            return result
+    return None
