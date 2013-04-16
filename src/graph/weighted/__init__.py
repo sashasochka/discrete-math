@@ -50,3 +50,11 @@ class Graph(graph.Graph):
 
     def weight(self) -> int:
         return sum([e.weight for e in self.edges()])
+
+    def has_negative(self) -> bool:
+        """
+        Return:
+            True if graph has negative edges
+            else False
+        """
+        return self._negative
