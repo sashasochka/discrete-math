@@ -85,6 +85,9 @@ class IO:
         kwargs['file'] = self.fileout
         print(*args, **kwargs)
 
+    def print_path(self, path: list):
+        self.print(' -> '.join([str(v + 1) for v in path]))
+
     def section(self, title):
         self.sections += 1
         self.print('\n' + '=' * 40)
