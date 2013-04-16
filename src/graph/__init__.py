@@ -35,6 +35,7 @@ class Edge:
         """
         Return 2nd vertex number
         """
+        raise NotImplementedError
 
 
 class Graph:
