@@ -9,6 +9,7 @@ from graph.directed import Graph as DirectedGraph
 from graph.directed import Edge as DirectedEdge
 from graph.directed import GraphMatrix as DirectedGraphMatrix
 from graph.weighted import Graph as WeightedGraph
+from graph.weighted import GraphMatrix as WeightedGraphMatrix
 from graph.weighted.directed import Graph as WeightedDirectedGraph
 from graph.weighted.directed import Edge as WeightedDirectedEdge
 
@@ -234,7 +235,7 @@ def floyd_warshall(G: WeightedDirectedGraph) -> AllToAllPathSearchResults:
 
     for i in range(G.V()):
         if result[i][i].distance < 0:  # negative cycle
-                return None
+            return None
 
     for i, row in enumerate(result):
         for j, res in enumerate(row):
@@ -301,6 +302,7 @@ def eulerian_cycle(G: DirectedGraphMatrix) -> list:
     Return:
         path of the cycle if found or None if not found
     """
+
     def selfloop(u: int):
         nonlocal G
         path = []
@@ -470,3 +472,46 @@ def hamiltonian_path(G: DirectedGraph) -> list:
             result = list(reversed(result))
             return result
     return None
+
+
+def TSP(G: WeightedGraphMatrix):
+    if not G.V():
+        return 0, []
+
+    prev_dp = {frozenset([0]): [(0, [0])] + [(sys.maxsize, [])] * (G.V() - 1)}
+    for _ in range(1, G.V()):
+        dp = {}
+        # S - set of already visited
+        # u - new next visited
+        # v - last visited
+        for S_prev, vals in prev_dp.items():
+            for v in range(G.V()):
+                dist = vals[v][0]
+                if dist >= sys.maxsize:
+                    continue
+                for u in range(G.V()):
+                    d = G.distance[v][u]
+                    if u not in S_prev and d is not None:
+                        S = set(S_prev)
+                        S.add(u)
+                        S = frozenset(S)
+
+                        if S in dp:
+                            new_vals = dp[S]
+                        else:
+                            new_dists = [sys.maxsize] * G.V()
+                            new_paths = [[] for _ in range(G.V())]
+                            new_vals = list(zip(new_dists, new_paths))
+
+                        if dist + d < new_vals[u][0]:
+                            new_vals[u] = (dist + d, vals[v][1] + [u])
+                        dp[S] = new_vals
+        prev_dp = dp
+    best = (sys.maxsize, [])
+    for i, (dst, path) in enumerate(prev_dp[frozenset(range(G.V()))]):
+        if G.distance[i][0] is not None:
+            altern_dst = dst + G.distance[i][0]
+            if altern_dst < best[0]:
+                best = (altern_dst, path)
+    best[1].append(best[1][0])
+    return best
