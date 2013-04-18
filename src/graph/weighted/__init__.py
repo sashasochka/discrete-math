@@ -1,6 +1,7 @@
 """
-Abstract classes for weighted graph
+Classes for weighted graph
 """
+import sys
 import graph
 
 
@@ -8,15 +9,29 @@ class Edge(graph.Edge):
     """
     Represent directed weighted edge
     """
-    def __init__(self):
+    def __init__(self, u: int, v: int, weight: float):
         """
         Args:
             source - is a source vertex
             dest - is a destination vertex
             weight - is a weight of this edge
         """
-        self.weight = 0
-        raise NotImplementedError
+        self.u = u
+        self.v = v
+        self.weight = weight
+
+    def reverse(self) -> 'Edge':
+        """
+        Return:
+            edge with reversed direction
+        """
+        return Edge(self.v, self.u, self.weight)
+
+    def either(self):
+        return self.u
+
+    def other(self):
+        return self.v
 
     def negative(self) -> bool:
         """
