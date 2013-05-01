@@ -32,9 +32,6 @@ class Edge(graph.Edge):
     def other(self):
         return self.v
 
-    def __str__(self):
-        return '{} {}'.format(self.u, self.v)
-
 
 class Graph(graph.Graph):
     """
