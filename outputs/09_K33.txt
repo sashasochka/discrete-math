@@ -1,0 +1,18 @@
+
+========================================
+1) Graph planarity:
+
+Graph is not planar!
+
+========================================
+2) Graph coloring:
+
+Graph can be colored using 2 colors, for example like this:
+№.  | Value
+  1 | 1
+  2 | 1
+  3 | 1
+  4 | 2
+  5 | 2
+  6 | 2
+
