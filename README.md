@@ -1,13 +1,13 @@
 Discrete math homework
 ================================
 
-This repository consists of lab works for 1st grade discrete structures class lab in my university (National Technical University of Ukraine "Kyiv Politechnical Institute") 
+This repository consists of lab assignments for 2nd cemester discrete structures class in my university (National Technical University of Ukraine "Kyiv Politechnical Institute") 
 This course consists of the following elements of graph theory:
- - shortest path algorithms
+ - shortest path algorithms (Dijkstra, Bellman-Ford, Floyd-Warshall, Johnson)
  - bfs/dfs
- - different graph representations
- - NP-hard problems
- - other stuff
+ - different graph representations (adjacency lists, adjacency matrix)
+ - NP-hard problems (graph coloring)
+ - other stuff (graph planarity checking)
 
 ### For my groupmates
 If you are my coursemate - don't use this code or use it with caution! You are warned.
