@@ -2,9 +2,11 @@
 Different graph algorithm implementations
 Works only with zero-based graphs
 """
+from operator import itemgetter
 import sys
 import heapq
-from copy import deepcopy
+from copy import deepcopy, copy
+from graph import Graph, Edge
 from graph.directed import Graph as DirectedGraph
 from graph.directed import Edge as DirectedEdge
 from graph.directed import GraphMatrix as DirectedGraphMatrix
@@ -515,3 +517,92 @@ def TSP(G: WeightedGraphMatrix):
                 best = (altern_dst, path)
     best[1].append(best[1][0])
     return best
+
+
+def isK33(G: Graph):
+    edges = []
+    for u in range(3):
+        for v in range(3, 6):
+            edges.append(Edge(u, v))
+    return G == Graph(6, len(edges), edges)
+
+
+def isK5(G: Graph):
+    edges = []
+    for u in range(5):
+        for v in range(u + 1, 5):
+            edges.append(Edge(u, v))
+    return G == Graph(5, len(edges), edges)
+
+
+def is_planar(G: Graph) -> bool:
+    """
+    Returns true if graph G is planar
+
+    (horrible exponential implementation)
+    FIXME: rewrite using linear algorithm
+
+    Examples:
+    >>> is_planar(Graph(1,0,[]))
+    True
+    >>> is_planar(Graph.fromfile(open('K33.txt')))
+    False
+    >>> is_planar(Graph.fromfile(open('K4.txt')))
+    True
+    >>> is_planar(Graph.fromfile(open('K5.txt')))
+    False
+    >>> is_planar(Graph.fromfile(open('petersen.txt')))
+    False
+    """
+    for mask in range(1 << G.E()):
+        remove_edges = []
+        left_edges = []
+        for i, e in enumerate(G.edges()):
+            if (mask >> i) % 2 == 1:
+                remove_edges.append(tuple(sorted([e.u, e.v])))
+            else:
+                left_edges.append(copy(e))
+        remove_edges.sort(key=itemgetter(1), reverse=True)
+        for u, v in remove_edges:
+            for e in left_edges:
+                if e.v == v:
+                    e.v = u
+                elif e.v > v:
+                    e.v -= 1
+                if e.u == v:
+                    e.u = u
+                elif e.u > v:
+                    e.u -= 1
+        left_edges = sorted(left_edges)
+        left_edg = []
+        st = None
+        V = -1
+        for e in left_edges:
+            V = max(V, e.u + 1, e.v + 1)
+            if e != st and e.u != e.v:
+                left_edg.append(e)
+            else:
+                st = e
+        contractedG = Graph(V, len(left_edg), left_edg)
+        if isK5(contractedG) or isK33(contractedG):
+            return False
+    return True
+
+
+def coloring(G: Graph):
+    colors = []
+
+    def color(k: int) -> bool:
+        nonlocal colors
+        for mask in range(k ** G.V()):
+            colors = [(mask // k ** i) % k for i in range(G.V() - 1, -1, -1)]
+            for e in G.edges():
+                if colors[e.u] == colors[e.v]:
+                    break
+            else:
+                return True
+        return False
+
+    for k in range(G.V() + 1):
+        if color(k):
+            return k, [i + 1 for i in colors]
