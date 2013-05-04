@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from common import IO
-from graph import algorithm, Graph, GraphMatrix
+from graph import algorithm, Graph
 
 io = IO()
 G = Graph.fromfile(io.filein)
