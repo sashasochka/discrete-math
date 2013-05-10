@@ -1,0 +1,21 @@
+
+========================================
+1) Eulerian cycle:
+
+Eulerian cycle not found!
+
+========================================
+2) Eulerian path:
+
+Eulerian path not found!
+
+========================================
+3) Hamiltonian cycle:
+
+Hamiltonian cycle not found!
+
+========================================
+4) Hamiltonian path:
+
+Hamiltonian path found: 
+1 -> 2 -> 3
