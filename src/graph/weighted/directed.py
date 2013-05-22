@@ -88,4 +88,3 @@ class Graph(graph.weighted.Graph):
             self.E(),
             [e.reverse() for e in self.edges()]
         )
-
