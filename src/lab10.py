@@ -15,7 +15,7 @@ try:
     io.print('Max flow value is {}\n'.format(flow_val))
     io.print('Flow on each edge: ')
     for edge in flow_graph.edges():
-        print('\tfor edge ({}, {}) flow is {}'.format(edge.source,
+        io.print('\tfor edge ({}, {}) flow is {}'.format(edge.source,
                                                       edge.dest,
                                                       edge.weight))
 except algorithm.ambigous_source:
