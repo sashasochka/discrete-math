@@ -1,0 +1,11 @@
+
+========================================
+1) Max flow algorithm (Floyd-Fulkerson method, Edmonds-Karp algorithm):
+
+Max flow value is 2000.0
+
+Flow on each edge: 
+	for edge (0, 1) flow is 1000.0
+	for edge (0, 2) flow is 1000.0
+	for edge (1, 3) flow is 1000.0
+	for edge (2, 3) flow is 1000.0
