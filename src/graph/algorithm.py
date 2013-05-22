@@ -4,7 +4,6 @@ Works only with zero-based graphs
 """
 from collections import deque
 from operator import itemgetter
-from queue import Queue
 import sys
 import heapq
 from copy import deepcopy, copy
