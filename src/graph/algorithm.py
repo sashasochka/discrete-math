@@ -2,7 +2,9 @@
 Different graph algorithm implementations
 Works only with zero-based graphs
 """
+from collections import deque
 from operator import itemgetter
+from queue import Queue
 import sys
 import heapq
 from copy import deepcopy, copy
@@ -606,3 +608,141 @@ def coloring(G: Graph):
     for k in range(G.V() + 1):
         if color(k):
             return k, [i + 1 for i in colors]
+
+
+class ambigous_source(Exception):
+    pass
+
+
+class no_source(Exception):
+    pass
+
+
+class ambigous_sink(Exception):
+    pass
+
+
+class no_sink(Exception):
+    pass
+
+
+def get_source(G: WeightedDirectedGraph) -> int:
+    """
+    Return index of source vertex in graph G
+    Example:
+    >>> get_source(WeightedDirectedGraph.fromfile(open('wiki_flow.txt')))
+    0
+    >>> get_source(WeightedDirectedGraph(0,0,[]))
+    Traceback (most recent call last):
+        ...
+    algorithm.no_source
+    >>> get_source(WeightedDirectedGraph(2,0,[]))
+    Traceback (most recent call last):
+        ...
+    algorithm.ambigous_source
+    """
+    in_degree = [0] * G.V()
+    for e in G.edges():
+        in_degree[e.dest] += 1
+    V = [v for v in range(G.V()) if in_degree[v] == 0]
+    if not V:
+        raise no_source
+    if len(V) > 1:
+        raise ambigous_source
+    return V[0]
+
+
+def get_sink(G: WeightedDirectedGraph) -> int:
+    """
+    Return index of output vertex in graph G
+    Example:
+    >>> get_sink(WeightedDirectedGraph.fromfile(open('wiki_flow.txt')))
+    5
+    >>> get_sink(WeightedDirectedGraph(0,0,[]))
+    Traceback (most recent call last):
+        ...
+    algorithm.no_sink
+    >>> get_sink(WeightedDirectedGraph(3,2,
+    ... [WeightedDirectedEdge(0, 1, 1), WeightedDirectedEdge(0, 2, 1)]))
+    Traceback (most recent call last):
+        ...
+    algorithm.ambigous_sink
+    """
+    V = [v for v in range(G.V()) if len(G.adj(v)) == 0]
+    if not V:
+        raise no_sink
+    if len(V) > 1:
+        raise ambigous_sink
+    return V[0]
+
+
+def edmonds_karp(G: WeightedDirectedGraph, s: int, t: int) -> tuple:
+    """
+    Find maximal flow in graph from source s to sink t
+    Return tuple of (weight: int, edges_with_weights)
+    edges_with_weights is list of tuples of (edge_weight: int, edge: Edge)
+    Example:
+    """
+    def bfs():
+        parent = [None] * G.V()
+        parent[s] = s
+        q = deque([])
+        q.append(s)
+        while q:
+            current = q.popleft()
+            for adjacent in adjacent_to[current]:
+                has_parent = parent[adjacent] is not None
+                left_flow_on_edge = M[current][adjacent] > F[current][adjacent]
+                can_go_backward = F[adjacent][current] > 0
+                if not has_parent and (left_flow_on_edge or can_go_backward):
+                    parent[adjacent] = current
+                    q.append(adjacent)
+                    if adjacent == t:
+                        return parent
+        return parent
+
+    def path_flow(parent):
+        result = sys.maxsize
+        cur = t
+        while cur != s:
+            # from parent[cur] to cur
+            if M[parent[cur]][cur] > F[parent[cur]][cur]:
+                flow_here = M[parent[cur]][cur] - F[parent[cur]][cur]
+            else:
+                flow_here = F[cur][parent[cur]]
+            cur = parent[cur]
+            result = min(result, flow_here)
+        return result
+
+    def add_flow_on_path(parent, val):
+        cur = t
+        while cur != s:
+            F[parent[cur]][cur] += val
+            F[cur][parent[cur]] -= val
+            cur = parent[cur]
+
+    flow_value = 0
+    F = [[0] * G.V() for _ in range(G.V())]
+    M = [[0] * G.V() for _ in range(G.V())]
+    adjacent_to = [[] for _ in range(G.V())]
+    for edge in G.edges():
+        M[edge.source][edge.dest] = edge.weight
+        adjacent_to[edge.source].append(edge.dest)
+        adjacent_to[edge.dest].append(edge.source)
+
+    while True:
+        parent = bfs()
+        if parent[t] is not None:
+            path_flow_val = path_flow(parent)
+            flow_value += path_flow_val
+            add_flow_on_path(parent, path_flow_val)
+        else:
+            flow_edges = []
+            for source in range(G.V()):
+                for dest, flow in enumerate(F[source]):
+                    if flow > 0:
+                        flow_edges.append(
+                            WeightedDirectedEdge(source, dest, flow)
+                        )
+            return flow_value, \
+                WeightedDirectedGraph(G.V(), len(flow_edges), flow_edges)
