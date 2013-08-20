@@ -8,8 +8,3 @@ This course consists of the following elements of graph theory:
  - different graph representations (adjacency lists, adjacency matrix)
  - NP-hard problems (graph coloring)
  - other stuff (graph planarity checking)
-
-### For my groupmates
-If you are my coursemate - don't use this code or use it with caution! You are warned.
-
-But read it as much as you want - ask me for questions if you need
